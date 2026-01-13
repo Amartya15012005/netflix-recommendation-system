@@ -1,0 +1,24 @@
+import pandas as pd
+
+df = pd.read_csv("data/processed/cleaned_netflix.csv")
+
+# Convert date
+df['date_added'] = pd.to_datetime(df['date_added'], errors='coerce')
+df['added_year'] = df['date_added'].dt.year
+
+# Duration cleaning
+def clean_duration(val):
+    if isinstance(val, str) and 'min' in val:
+        return int(val.replace(' min', ''))
+    return None
+
+df['duration_minutes'] = df['duration'].apply(clean_duration)
+
+# Genre & cast counts
+df['genre_count'] = df['listed_in'].apply(lambda x: len(str(x).split(',')))
+df['cast_count'] = df['cast'].apply(lambda x: len(str(x).split(',')))
+
+# Save features
+df.to_csv("data/processed/netflix_features.csv", index=False)
+
+print("Feature engineering completed")
