@@ -1,0 +1,7 @@
+import pandas as pd
+
+df = pd.read_csv("data/processed/cleaned_netflix.csv")
+
+print("Dataset shape:", df.shape)
+print("\nMovies vs TV Shows:")
+print(df['type'].value_counts())
